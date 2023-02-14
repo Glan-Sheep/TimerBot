@@ -1,6 +1,6 @@
-import { BotName } from "../bot.ts";
+import { TimerBot } from "../bot.ts";
 import log from "utils/logger.ts";
 
-BotName.events.ready = () => {
+TimerBot.events.ready = () => {
   log.info(`[READY]`);
 };

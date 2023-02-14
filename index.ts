@@ -1,11 +1,12 @@
 import { dirname, sep } from "std/path/mod.ts";
 import { startBot } from "discordeno/mod.ts";
-import { BotName } from "./bot.ts";
+import { TimerBot } from "./bot.ts";
 import { importCommands, importEvents, importPath } from "utils/loader.ts";
 import { updateAppcationCommands } from "utils/updateCommands.ts";
 import log from "utils/logger.ts";
 
 import verify_config from "utils/verify-config.ts";
+import interval_init from "utils/interval.ts";
 
 log.info("Starting bot...");
 
@@ -16,11 +17,13 @@ if (!configCorrect) {
   Deno.exit();
 }
 
-await startBot(BotName);
+await startBot(TimerBot);
 importPath(directory());
 await importCommands();
 await updateAppcationCommands();
 await importEvents();
+
+interval_init();
 
 function directory(): string {
   const dir = `${dirname(import.meta.url)}${sep}`;

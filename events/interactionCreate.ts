@@ -1,4 +1,4 @@
-import { BotName } from "../bot.ts";
+import { TimerBot } from "../bot.ts";
 import {
   Interaction,
   InteractionResponseTypes,
@@ -7,7 +7,7 @@ import {
 import { EmbedBuilder } from "../lib/embed.ts";
 import log from "../utils/logger.ts";
 
-BotName.events.interactionCreate = (_, interaction) => {
+TimerBot.events.interactionCreate = (_, interaction) => {
   if (!interaction.data) return;
 
   switch (interaction.type) {
@@ -15,12 +15,12 @@ BotName.events.interactionCreate = (_, interaction) => {
       log.info(`[Application Command] ${interaction.data.name} command`);
       const args = interaction.data.options;
       if (!args) {
-        const reply = BotName.commands
+        const reply = TimerBot.commands
           .get(interaction.data.name!)
           ?.execute(interaction);
         response(reply, interaction);
       } else {
-        const reply = BotName.commands
+        const reply = TimerBot.commands
           .get(interaction.data.name!)
           ?.execute(interaction, args);
         response(reply, interaction);
@@ -36,7 +36,7 @@ function response(
 ) {
   if (reply instanceof Promise<EmbedBuilder>) {
     reply.then((embed) => {
-      BotName.helpers.sendInteractionResponse(
+      TimerBot.helpers.sendInteractionResponse(
         interaction.id,
         interaction.token,
         {
@@ -48,11 +48,15 @@ function response(
       );
     });
   } else if (reply instanceof EmbedBuilder) {
-    BotName.helpers.sendInteractionResponse(interaction.id, interaction.token, {
-      type: InteractionResponseTypes.ChannelMessageWithSource,
-      data: {
-        embeds: [reply.data],
-      },
-    });
+    TimerBot.helpers.sendInteractionResponse(
+      interaction.id,
+      interaction.token,
+      {
+        type: InteractionResponseTypes.ChannelMessageWithSource,
+        data: {
+          embeds: [reply.data],
+        },
+      }
+    );
   }
 }
